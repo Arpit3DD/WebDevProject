@@ -532,7 +532,7 @@
   </footer>
 
   <script>
-    // Update cart badge
+ 
     function updateCartBadge() {
       const cart = JSON.parse(localStorage.getItem('cart')) || [];
       const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
@@ -545,3 +545,4 @@
 </body>
 
 </html>
+
