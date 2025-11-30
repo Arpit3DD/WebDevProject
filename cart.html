@@ -490,7 +490,7 @@
       calculateTotals();
     }
 
-    // Update quantity
+   
     function updateQuantity(index, change) {
       cart[index].qty += change;
       
@@ -503,7 +503,7 @@
       updateCartBadge();
     }
 
-    // Remove item
+    
     function removeItem(index) {
       if (confirm(`Remove ${cart[index].name} from cart?`)) {
         cart.splice(index, 1);
@@ -513,7 +513,7 @@
       }
     }
 
-    // Checkout
+   
     document.getElementById('checkoutBtn').addEventListener('click', function() {
       if (cart.length === 0) return;
       
@@ -528,22 +528,22 @@
       
       alert(`Thank you for your order!\n\nTotal: ₹${total.toLocaleString('en-IN', { maximumFractionDigits: 2 })}\n\nYour order will be delivered soon!`);
       
-      // Clear cart after checkout
+   
       cart = [];
       localStorage.setItem("cart", JSON.stringify(cart));
       renderCart();
       updateCartBadge();
     });
 
-    // Make functions global for onclick handlers
+   
     window.updateQuantity = updateQuantity;
     window.removeItem = removeItem;
 
-    // Initialize
+    
     renderCart();
     updateCartBadge();
 
-    // Listen for storage changes
+    
     window.addEventListener('storage', () => {
       cart = JSON.parse(localStorage.getItem("cart")) || [];
       renderCart();
@@ -552,4 +552,5 @@
   </script>
 </body>
 </html>
+
 
