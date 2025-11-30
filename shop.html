@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>StyleSphere - Shop</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      font-family: 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f8f9fa;
+      color: #222;
+      min-height: 100vh;
+    }
+
+    header {
+      padding: 20px 40px;
+      background: #fff;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-weight: 900;
+      font-size: 2rem;
+      color: #ffce00;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      letter-spacing: 2px;
+      text-decoration: none;
+    }
+
+    nav {
+      display: flex;
+      gap: 30px;
+      align-items: center;
+    }
+
+    nav a {
+      color: #333;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: color 0.3s ease;
+      position: relative;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: #ffce00;
+      transition: width 0.3s ease;
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    nav a:hover {
+      color: #ffce00;
+    }
+
+    .cart-icon {
+      position: relative;
+      font-size: 1.5rem;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .cart-badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: #e74c3c;
+      color: white;
+      border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      font-size: 0.7rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 40px auto 80px;
+      padding: 0 20px;
+    }
+
+    .welcome-banner {
+      background: linear-gradient(135deg, #ffce00, #d4ac0d);
+      color: white;
+      font-size: 1.6rem;
+      font-weight: 600;
+      padding: 30px 40px;
+      border-radius: 15px;
+      text-align: center;
+      margin-bottom: 50px;
+      box-shadow: 0 10px 30px rgba(255, 206, 0, 0.3);
+      animation: fadeIn 0.6s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2.section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 40px;
+      color: #333;
+      text-align: center;
+      position: relative;
+      padding-bottom: 20px;
+    }
+
+    h2.section-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 4px;
+      background: #ffce00;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 35px;
+    }
+
+    .product-card {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .product-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 40px rgba(255, 206, 0, 0.2);
+    }
+
+    .product-img-container {
+      position: relative;
+      width: 100%;
+      height: 280px;
+      overflow: hidden;
+      background: #f0f0f0;
+    }
+
+    .product-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .product-card:hover .product-img {
+      transform: scale(1.1);
+    }
+
+    .product-badge {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: #e74c3c;
+      color: white;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      z-index: 10;
+    }
+
+    .product-info {
+      padding: 25px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .product-name {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 10px;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .product-desc {
+      font-size: 0.95rem;
+      color: #666;
+      margin-bottom: 20px;
+      line-height: 1.6;
+      flex-grow: 1;
+    }
+
+    .product-price {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #ffce00;
+      margin-bottom: 20px;
+      letter-spacing: 0.05em;
+    }
+
+    .btn-buy {
+      background: linear-gradient(135deg, #ffce00, #d4ac0d);
+      border: none;
+      border-radius: 50px;
+      padding: 14px 0;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      width: 100%;
+      box-shadow: 0 5px 15px rgba(255, 206, 0, 0.3);
+    }
+
+    .btn-buy:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(255, 206, 0, 0.5);
+    }
+
+    .btn-buy:active {
+      transform: translateY(0);
+    }
+
+    .btn-buy.added {
+      background: #27ae60;
+      box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
+    }
+
+    .notification {
+      position: fixed;
+      top: 100px;
+      right: 20px;
+      background: #27ae60;
+      color: white;
+      padding: 15px 25px;
+      border-radius: 10px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+      display: none;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    .notification.show {
+      display: block;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        padding: 15px 20px;
+      }
+
+      nav {
+        gap: 15px;
+        font-size: 0.9rem;
+      }
+
+      main {
+        margin: 20px auto 50px;
+      }
+
+      h2.section-title {
+        font-size: 2.2rem;
+      }
+
+      .products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 25px;
+      }
+
+      .product-img-container {
+        height: 220px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="index.html" class="logo">StyleSphere</a>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="login.html">Login</a>
+      <a href="shop.html">Shop</a>
+      <a href="cart.html" class="cart-icon">
+        🛒
+        <span class="cart-badge" id="cartBadge">0</span>
+      </a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="welcome-banner" id="welcomeMessage">
+      Welcome to StyleSphere! Start Shopping Now 🛍️
+    </div>
+
+    <h2 class="section-title">Latest Fashion Collection</h2>
+
+    <div class="products-grid">
+      <div class="product-card">
+        <div class="product-img-container">
+          <img class="product-img" src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=600&q=80" alt="Men's Casual Shirt" />
+          <span class="product-badge">New</span>
+        </div>
+        <div class="product-info">
+          <div>
+            <div class="product-name">Men's Casual Shirt</div>
+            <div class="product-desc">Comfortable cotton shirt perfect for daily wear. Premium quality fabric with modern design.</div>
+          </div>
+          <div>
+            <div class="product-price">₹799</div>
+            <button class="btn-buy add-to-cart"
+              data-name="Men's Casual Shirt"
+              data-price="799"
+              data-img="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=600&q=80">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-container">
+          <img class="product-img" src="https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=600&q=80" alt="Women's Kurti" />
+          <span class="product-badge">Popular</span>
+        </div>
+        <div class="product-info">
+          <div>
+            <div class="product-name">Women's Kurti</div>
+            <div class="product-desc">Elegant and vibrant ethnic wear for every occasion. Comfortable and stylish design.</div>
+          </div>
+          <div>
+            <div class="product-price">₹1,200</div>
+            <button class="btn-buy add-to-cart"
+              data-name="Women's Kurti"
+              data-price="1200"
+              data-img="https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=600&q=80">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-container">
+          <img class="product-img" src="https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=600&q=80" alt="Denim Jeans" />
+        </div>
+        <div class="product-info">
+          <div>
+            <div class="product-name">Denim Jeans</div>
+            <div class="product-desc">Classic blue jeans with a comfortable fit and timeless style. Perfect for casual outings.</div>
+          </div>
+          <div>
+            <div class="product-price">₹1,499</div>
+            <button class="btn-buy add-to-cart"
+              data-name="Denim Jeans"
+              data-price="1499"
+              data-img="https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=600&q=80">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-container">
+          <img class="product-img" src="https://images.unsplash.com/photo-1520975966371-3a99f07de2a3?auto=format&fit=crop&w=600&q=80" alt="Ethnic Saree" />
+          <span class="product-badge">Premium</span>
+        </div>
+        <div class="product-info">
+          <div>
+            <div class="product-name">Ethnic Saree</div>
+            <div class="product-desc">Traditional saree crafted with beautiful designs and premium fabric. Perfect for special occasions.</div>
+          </div>
+          <div>
+            <div class="product-price">₹3,500</div>
+            <button class="btn-buy add-to-cart"
+              data-name="Ethnic Saree"
+              data-price="3500"
+              data-img="https://images.unsplash.com/photo-1520975966371-3a99f07de2a3?auto=format&fit=crop&w=600&q=80">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-container">
+          <img class="product-img" src="https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=600&q=80" alt="Sneakers" />
+          <span class="product-badge">Trending</span>
+        </div>
+        <div class="product-info">
+          <div>
+            <div class="product-name">Sneakers</div>
+            <div class="product-desc">Stylish and comfortable sneakers for your casual outings. Durable and lightweight design.</div>
+          </div>
+          <div>
+            <div class="product-price">₹2,200</div>
+            <button class="btn-buy add-to-cart"
+              data-name="Sneakers"
+              data-price="2200"
+              data-img="https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=600&q=80">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-container">
+          <img class="product-img" src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=600&q=80" alt="Leather Jacket" />
+          <span class="product-badge">Premium</span>
+        </div>
+        <div class="product-info">
+          <div>
+            <div class="product-name">Leather Jacket</div>
+            <div class="product-desc">Premium leather jacket for a bold and stylish look. Perfect for making a statement.</div>
+          </div>
+          <div>
+            <div class="product-price">₹4,999</div>
+            <button class="btn-buy add-to-cart"
+              data-name="Leather Jacket"
+              data-price="4999"
+              data-img="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=600&q=80">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-container">
+          <img class="product-img" src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?auto=format&fit=crop&w=600&q=80" alt="Designer Dress" />
+          <span class="product-badge">New</span>
+        </div>
+        <div class="product-info">
+          <div>
+            <div class="product-name">Designer Dress</div>
+            <div class="product-desc">Elegant designer dress perfect for parties and special events. Modern and sophisticated.</div>
+          </div>
+          <div>
+            <div class="product-price">₹2,800</div>
+            <button class="btn-buy add-to-cart"
+              data-name="Designer Dress"
+              data-price="2800"
+              data-img="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?auto=format&fit=crop&w=600&q=80">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-container">
+          <img class="product-img" src="https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=600&q=80" alt="Formal Suit" />
+        </div>
+        <div class="product-info">
+          <div>
+            <div class="product-name">Formal Suit</div>
+            <div class="product-desc">Classic formal suit for business and professional occasions. Tailored to perfection.</div>
+          </div>
+          <div>
+            <div class="product-price">₹5,500</div>
+            <button class="btn-buy add-to-cart"
+              data-name="Formal Suit"
+              data-price="5500"
+              data-img="https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=600&q=80">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-img-container">
+          <img class="product-img" src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=600&q=80" alt="Summer Dress" />
+          <span class="product-badge">Sale</span>
+        </div>
+        <div class="product-info">
+          <div>
+            <div class="product-name">Summer Dress</div>
+            <div class="product-desc">Light and breezy summer dress perfect for warm weather. Comfortable and stylish.</div>
+          </div>
+          <div>
+            <div class="product-price">₹1,500</div>
+            <button class="btn-buy add-to-cart"
+              data-name="Summer Dress"
+              data-price="1500"
+              data-img="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=600&q=80">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="notification" id="notification">
+    Item added to cart!
+  </div>
+
+  <script>
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    
+    // Update cart badge
+    function updateCartBadge() {
+      const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+      document.getElementById('cartBadge').textContent = totalItems;
+    }
+
+    // Show notification
+    function showNotification(message) {
+      const notification = document.getElementById('notification');
+      notification.textContent = message;
+      notification.classList.add('show');
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 2000);
+    }
+
+    // Update welcome message
+    function updateWelcomeMessage() {
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (user && user.name) {
+        document.getElementById('welcomeMessage').textContent = `Welcome back, ${user.name}! Start Shopping Now 🛍️`;
+      }
+    }
+
+    // Add to cart functionality
+    document.querySelectorAll(".add-to-cart").forEach(button => {
+      button.addEventListener("click", (e) => {
+        e.stopPropagation();
+        
+        const item = {
+          name: button.dataset.name,
+          price: parseFloat(button.dataset.price),
+          img: button.dataset.img,
+          qty: 1
+        };
+
+        // Check if already in cart
+        let existing = cart.find(p => p.name === item.name);
+
+        if (existing) {
+          existing.qty++;
+          showNotification(`${item.name} quantity updated!`);
+        } else {
+          cart.push(item);
+          showNotification(`${item.name} added to cart!`);
+        }
+
+        // Save to localStorage
+        localStorage.setItem("cart", JSON.stringify(cart));
+        updateCartBadge();
+
+        // Visual feedback
+        button.classList.add('added');
+        button.textContent = 'Added ✓';
+        setTimeout(() => {
+          button.classList.remove('added');
+          button.textContent = 'Add to Cart';
+        }, 1500);
+      });
+    });
+
+    // Initialize
+    updateCartBadge();
+    updateWelcomeMessage();
+    
+    // Listen for storage changes (if cart is updated in another tab)
+    window.addEventListener('storage', () => {
+      cart = JSON.parse(localStorage.getItem("cart")) || [];
+      updateCartBadge();
+    });
+  </script>
+</body>
+</html>

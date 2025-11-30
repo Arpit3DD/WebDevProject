@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>StyleSphere - Shopping Cart</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      font-family: 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f8f9fa;
+      color: #222;
+      min-height: 100vh;
+    }
+
+    header {
+      padding: 20px 40px;
+      background: #fff;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-weight: 900;
+      font-size: 2rem;
+      color: #ffce00;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      letter-spacing: 2px;
+      text-decoration: none;
+    }
+
+    nav {
+      display: flex;
+      gap: 30px;
+      align-items: center;
+    }
+
+    nav a {
+      color: #333;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: color 0.3s ease;
+      position: relative;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: #ffce00;
+      transition: width 0.3s ease;
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    nav a:hover {
+      color: #ffce00;
+    }
+
+    .cart-icon {
+      position: relative;
+      font-size: 1.5rem;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .cart-badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: #e74c3c;
+      color: white;
+      border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      font-size: 0.7rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 40px auto 80px;
+      padding: 0 20px;
+    }
+
+    .page-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 40px;
+      color: #333;
+      text-align: center;
+    }
+
+    .cart-container {
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 40px;
+    }
+
+    .cart-items {
+      background: #fff;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+
+    .empty-cart {
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .empty-cart-icon {
+      font-size: 5rem;
+      margin-bottom: 20px;
+    }
+
+    .empty-cart h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      color: #666;
+      margin-bottom: 15px;
+    }
+
+    .empty-cart p {
+      color: #999;
+      margin-bottom: 30px;
+    }
+
+    .btn-shop {
+      background: linear-gradient(135deg, #ffce00, #d4ac0d);
+      color: #fff;
+      border: none;
+      padding: 15px 40px;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .btn-shop:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(255, 206, 0, 0.4);
+    }
+
+    .cart-item {
+      display: flex;
+      gap: 20px;
+      padding: 25px 0;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .cart-item:last-child {
+      border-bottom: none;
+    }
+
+    .cart-item-img {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 10px;
+      flex-shrink: 0;
+    }
+
+    .cart-item-details {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .cart-item-name {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 8px;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .cart-item-price {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #ffce00;
+      margin-bottom: 15px;
+    }
+
+    .cart-item-controls {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .quantity-control {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #f8f9fa;
+      border-radius: 25px;
+      padding: 5px 10px;
+    }
+
+    .qty-btn {
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      font-weight: 700;
+    }
+
+    .qty-btn:hover {
+      background: #ffce00;
+      color: #fff;
+      border-color: #ffce00;
+    }
+
+    .qty-value {
+      font-weight: 700;
+      min-width: 30px;
+      text-align: center;
+    }
+
+    .remove-btn {
+      background: #e74c3c;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+    }
+
+    .remove-btn:hover {
+      background: #c0392b;
+      transform: translateY(-2px);
+    }
+
+    .cart-summary {
+      background: #fff;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+      height: fit-content;
+      position: sticky;
+      top: 100px;
+    }
+
+    .summary-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      margin-bottom: 25px;
+      color: #333;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+      font-size: 1.1rem;
+    }
+
+    .summary-row.total {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #ffce00;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 2px solid #f0f0f0;
+    }
+
+    .summary-label {
+      color: #666;
+    }
+
+    .summary-value {
+      font-weight: 600;
+      color: #333;
+    }
+
+    .checkout-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #ffce00, #d4ac0d);
+      color: #fff;
+      border: none;
+      padding: 18px;
+      border-radius: 50px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 25px;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 5px 15px rgba(255, 206, 0, 0.3);
+    }
+
+    .checkout-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(255, 206, 0, 0.5);
+    }
+
+    .checkout-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    @media (max-width: 968px) {
+      .cart-container {
+        grid-template-columns: 1fr;
+      }
+
+      .cart-summary {
+        position: static;
+      }
+    }
+
+    @media (max-width: 600px) {
+      header {
+        padding: 15px 20px;
+      }
+
+      nav {
+        gap: 15px;
+        font-size: 0.9rem;
+      }
+
+      .page-title {
+        font-size: 2rem;
+      }
+
+      .cart-item {
+        flex-direction: column;
+      }
+
+      .cart-item-img {
+        width: 100%;
+        height: 200px;
+      }
+
+      .cart-item-controls {
+        flex-wrap: wrap;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="index.html" class="logo">StyleSphere</a>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="login.html">Login</a>
+      <a href="shop.html">Shop</a>
+      <a href="cart.html" class="cart-icon">
+        🛒
+        <span class="cart-badge" id="cartBadge">0</span>
+      </a>
+    </nav>
+  </header>
+
+  <main>
+    <h1 class="page-title">Shopping Cart</h1>
+
+    <div class="cart-container">
+      <div class="cart-items" id="cartItems">
+        <!-- Cart items will be dynamically inserted here -->
+      </div>
+
+      <div class="cart-summary">
+        <h2 class="summary-title">Order Summary</h2>
+        <div class="summary-row">
+          <span class="summary-label">Subtotal:</span>
+          <span class="summary-value" id="subtotal">₹0</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">Shipping:</span>
+          <span class="summary-value" id="shipping">₹50</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">Tax (18%):</span>
+          <span class="summary-value" id="tax">₹0</span>
+        </div>
+        <div class="summary-row total">
+          <span>Total:</span>
+          <span id="total">₹0</span>
+        </div>
+        <button class="checkout-btn" id="checkoutBtn" disabled>Proceed to Checkout</button>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    // Update cart badge
+    function updateCartBadge() {
+      const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+      document.getElementById('cartBadge').textContent = totalItems;
+    }
+
+    // Calculate totals
+    function calculateTotals() {
+      const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+      const shipping = subtotal > 0 ? 50 : 0;
+      const tax = subtotal * 0.18;
+      const total = subtotal + shipping + tax;
+
+      document.getElementById('subtotal').textContent = `₹${subtotal.toLocaleString('en-IN')}`;
+      document.getElementById('shipping').textContent = `₹${shipping}`;
+      document.getElementById('tax').textContent = `₹${tax.toFixed(2)}`;
+      document.getElementById('total').textContent = `₹${total.toLocaleString('en-IN', { maximumFractionDigits: 2 })}`;
+
+      document.getElementById('checkoutBtn').disabled = cart.length === 0;
+    }
+
+    // Render cart items
+    function renderCart() {
+      const cartItemsContainer = document.getElementById('cartItems');
+
+      if (cart.length === 0) {
+        cartItemsContainer.innerHTML = `
+          <div class="empty-cart">
+            <div class="empty-cart-icon">🛒</div>
+            <h2>Your cart is empty</h2>
+            <p>Looks like you haven't added anything to your cart yet.</p>
+            <a href="shop.html" class="btn-shop">Start Shopping</a>
+          </div>
+        `;
+        calculateTotals();
+        return;
+      }
+
+      cartItemsContainer.innerHTML = cart.map((item, index) => `
+        <div class="cart-item">
+          <img src="${item.img}" alt="${item.name}" class="cart-item-img" />
+          <div class="cart-item-details">
+            <div>
+              <div class="cart-item-name">${item.name}</div>
+              <div class="cart-item-price">₹${item.price.toLocaleString('en-IN')}</div>
+            </div>
+            <div class="cart-item-controls">
+              <div class="quantity-control">
+                <button class="qty-btn" onclick="updateQuantity(${index}, -1)">-</button>
+                <span class="qty-value">${item.qty}</span>
+                <button class="qty-btn" onclick="updateQuantity(${index}, 1)">+</button>
+              </div>
+              <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      calculateTotals();
+    }
+
+    // Update quantity
+    function updateQuantity(index, change) {
+      cart[index].qty += change;
+      
+      if (cart[index].qty <= 0) {
+        cart.splice(index, 1);
+      }
+
+      localStorage.setItem("cart", JSON.stringify(cart));
+      renderCart();
+      updateCartBadge();
+    }
+
+    // Remove item
+    function removeItem(index) {
+      if (confirm(`Remove ${cart[index].name} from cart?`)) {
+        cart.splice(index, 1);
+        localStorage.setItem("cart", JSON.stringify(cart));
+        renderCart();
+        updateCartBadge();
+      }
+    }
+
+    // Checkout
+    document.getElementById('checkoutBtn').addEventListener('click', function() {
+      if (cart.length === 0) return;
+      
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (!user) {
+        alert('Please login first!');
+        window.location.href = 'login.html';
+        return;
+      }
+
+      const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0) + 50 + (cart.reduce((sum, item) => sum + (item.price * item.qty), 0) * 0.18);
+      
+      alert(`Thank you for your order!\n\nTotal: ₹${total.toLocaleString('en-IN', { maximumFractionDigits: 2 })}\n\nYour order will be delivered soon!`);
+      
+      // Clear cart after checkout
+      cart = [];
+      localStorage.setItem("cart", JSON.stringify(cart));
+      renderCart();
+      updateCartBadge();
+    });
+
+    // Make functions global for onclick handlers
+    window.updateQuantity = updateQuantity;
+    window.removeItem = removeItem;
+
+    // Initialize
+    renderCart();
+    updateCartBadge();
+
+    // Listen for storage changes
+    window.addEventListener('storage', () => {
+      cart = JSON.parse(localStorage.getItem("cart")) || [];
+      renderCart();
+      updateCartBadge();
+    });
+  </script>
+</body>
+</html>
+
